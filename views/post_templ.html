@@ -6,9 +6,11 @@
   <title>{{.Title}}</title>
 </head>
 <body>
+    {{template "navbar"}}
   <div>
       <h1>{{.Title}}<h1>
     {{.Content}}
   </div>
+    {{template "footer"}}
 </body>
 </html>
