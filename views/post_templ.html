@@ -6,12 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>{{.Title}}</title>
     <script
-        src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
+        src="https://cdn.tailwindcss.com?plugins=typography"></script>
 </head>
 <body>
     {{template "navbar"}}
-        <article class="bg-gray-100 p-4 prose prose-slate mx-auto mt-8 lg:prose-lg">
-            <h1>{{.Title}}</h1>
+        <article class="p-20 prose prose-slate mx-auto mt-8 shadow-2xl rounded-md border-2 border-slate-200 lg:prose-lg max-w-4xl">
             {{.Content}}
         </article>
     {{template "footer"}}
