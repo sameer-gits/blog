@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>{{.Title}}</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{{.Title}}</title>
+    <script
+        src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp,container-queries"></script>
 </head>
 <body>
     {{template "navbar"}}
-  <div>
-      <h1>{{.Title}}<h1>
-    {{.Content}}
-  </div>
+        <article class="bg-gray-100 p-4 prose prose-slate mx-auto mt-8 lg:prose-lg">
+            <h1>{{.Title}}</h1>
+            {{.Content}}
+        </article>
     {{template "footer"}}
 </body>
+
 </html>
