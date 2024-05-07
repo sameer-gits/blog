@@ -1,9 +1,20 @@
 {{define "navbar"}}
-<div>
-<nav>
-    <ul>
-        <li><a href="/">Home</a></li>
-    </ul>
+    <nav class="shadow-blue-500/10 shadow-lg bg-white left-0 right-0 fixed top-0 py-2 space-y-4 px-4">
+<form class="group relative">
+      <svg width="20" height="20" fill="currentColor" class="absolute left-3 top-1/2 -mt-2.5 text-slate-400 pointer-events-none group-focus-within:text-blue-500" aria-hidden="true">
+        <path fill-rule="evenodd" clip-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" />
+      </svg>
+      <input class="focus:ring-2 focus:ring-blue-500 focus:outline-none appearance-none w-full text-sm leading-6 text-slate-900 placeholder-slate-400 rounded-md py-2 pl-10 ring-1 ring-slate-200 shadow-blue-500/10 shadow-sm" type="text" aria-label="Search projects" placeholder="Search blogs...">
+    </form>
+    <div class="flex space-x-4">
+            <a href="/" class="active:text-blue-500 hover:bg-slate-100 bg-white hover:text-black rounded-md px-3 py-2 text-sm font-medium">All Posts</a>
+<button onclick="window.location.href='https://github.com/sameer-gits/blog'" class="active:text-blue-500 hover:bg-slate-100 bg-white hover:text-black rounded-md px-3 py-2 text-sm font-medium flex items-center">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+    <path fill-rule="evenodd" d="M10 0a10 10 0 00-3.16 19.49c.5.09.68-.22.68-.48l-.01-1.71c-2.78.6-3.37-1.34-3.37-1.34-.45-1.14-1.09-1.44-1.09-1.44-.89-.61.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.64.35-1.08.64-1.33-2.24-.25-4.59-1.12-4.59-4.98 0-1.1.39-2 1.03-2.7-.1-.25-.45-1.28.1-2.66 0 0 .85-.27 2.78 1.03.81-.23 1.68-.34 2.54-.34.86 0 1.73.11 2.54.34 1.93-1.3 2.78-1.03 2.78-1.03.55 1.38.2 2.41.1 2.66.64.69 1.03 1.59 1.03 2.7 0 3.87-2.36 4.73-4.6 4.98.36.31.68.92.68 1.85v2.75c0 .26.18.57.69.47A10 10 0 0010 0z" clip-rule="evenodd"/>
+  </svg>
+  Edit on Github
+</button>
+    </div>
 </nav>
-</div>
+<div class="h-32"></div>
 {{end}}
