@@ -4,13 +4,14 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>{{.Title}}</title>
+    <title>Mohd Sameer - Blog Post | {{.Title}}</title>
     <script
         src="https://cdn.tailwindcss.com?plugins=typography"></script>
 </head>
-<body>
+<body class="flex flex-col min-h-screen">
     {{template "navbar"}}
-        <article class="p-8 sm:p-20 prose prose-slate mx-auto mt-8 shadow-none lg:shadow-2xl lg:shadow-blue-500/30 rounded-md border-2 border-white lg:border-blue-100 lg:prose-lg max-w-4xl">
+        <article class="p-8 sm:p-20 prose prose-slate mx-auto my-8 md:my-20 shadow-none lg:shadow-2xl lg:shadow-blue-500/30 rounded-md border-2 border-white lg:border-blue-100 lg:prose-lg max-w-4xl">
+            <h1 class="text-wrap text-pretty break-all">{{.Title}}</h1>
             {{.Content}}
         </article>
     {{template "footer"}}

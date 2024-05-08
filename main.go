@@ -5,12 +5,14 @@ import (
 	"html/template"
 	"log"
 	"os"
+	"strings"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
-	"github.com/yuin/goldmark/parser"
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 func main() {
@@ -22,33 +24,72 @@ func main() {
 
 	app.Static("/", "./public")
 
+	// Handler for the homepage to display all posts
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
+		files, err := os.ReadDir("./all_blogs")
+		if err != nil {
+			log.Println("Error reading blog directory:", err)
+			return err
+		}
+
+		var posts []map[string]interface{}
+
+		for _, file := range files {
+			title := strings.TrimSuffix(file.Name(), ".md")
+			capital_title := cases.Title(language.Und, cases.NoLower).String(title)
+			markdown, err := os.ReadFile("./all_blogs/" + file.Name())
+			if err != nil {
+				log.Println("Error reading file:", err)
+				continue
+			}
+
+			md := goldmark.New(
+				goldmark.WithExtensions(extension.GFM),
+			)
+
+			var postContent bytes.Buffer
+			if err := md.Convert(markdown, &postContent); err != nil {
+				log.Println("Error converting markdown:", err)
+				continue
+			}
+			truncated_content := postContent.String()
+			post := map[string]interface{}{
+				"Title":   capital_title,
+                "Content": template.HTML(truncated_content[:200]),
+				"Slug":    strings.ReplaceAll(title, " ", "-"),
+			}
+			posts = append(posts, post)
+		}
+
+		return c.Render("homepage", fiber.Map{
+			"Posts": posts,
+		})
 	})
 
+	// Handler for individual posts
 	app.Get("posts/:post_name?", func(c *fiber.Ctx) error {
-		post_name := c.Params("post_name")
-		if post_name != "" {
-			markdown, err := os.ReadFile("./all_blogs/" + post_name + ".md")
+		postName := c.Params("post_name")
+		title := strings.ReplaceAll(postName, "-", " ")
+		capital_title := cases.Title(language.Und, cases.NoLower).String(title)
+		if postName != "" {
+			markdown, err := os.ReadFile("./all_blogs/" + title + ".md")
 			if err != nil {
 				log.Println("Error reading file:", err)
 				return err
 			}
 			md := goldmark.New(
 				goldmark.WithExtensions(extension.GFM),
-				goldmark.WithParserOptions(
-					parser.WithAutoHeadingID(),
-				),
 			)
-			var post_content bytes.Buffer
-			if err := md.Convert(markdown, &post_content); err != nil {
+
+			var postContent bytes.Buffer
+			if err := md.Convert(markdown, &postContent); err != nil {
 				log.Println("Error converting markdown:", err)
 				return err
 			}
 
 			return c.Render("post_templ", fiber.Map{
-				"Title":   post_name,
-				"Content": template.HTML(post_content.String()),
+				"Title":   capital_title,
+				"Content": template.HTML(postContent.String()),
 			})
 		}
 
