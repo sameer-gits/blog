@@ -1,15 +1,15 @@
 {{define "navbar"}}
 <nav class="shadow-blue-500/10 shadow-lg bg-white left-0 right-0 fixed top-0 py-2 space-y-4 px-4">
-    <form class="group relative">
+ <form id="searchForm" class="group relative" action="/search" hx-get="/search" hx-trigger="input" hx-target="#searchResults" method="GET">
         <svg width="20" height="20" fill="currentColor"
             class="absolute left-3 top-1/2 -mt-2.5 text-slate-400 pointer-events-none group-focus-within:text-blue-500"
             aria-hidden="true">
             <path fill-rule="evenodd" clip-rule="evenodd"
                 d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" />
         </svg>
-        <input
+        <input id="searchInput"
             class="focus:ring-2 focus:ring-blue-500 focus:outline-none appearance-none w-full text-sm leading-6 text-slate-900 placeholder-slate-400 rounded-md py-2 pl-10 ring-1 ring-slate-200 shadow-blue-500/10 shadow-sm"
-            type="text" aria-label="Search Posts" placeholder="Search posts...">
+            name="query" type="text" aria-label="Search Posts" placeholder="Search posts..." autocomplete="off">
     </form>
     <div class="flex space-x-4">
         <a href="/"

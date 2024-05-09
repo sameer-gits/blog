@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"html/template"
 	"log"
 	"os"
@@ -23,6 +24,56 @@ func main() {
 	})
 
 	app.Static("/", "./public")
+
+	//below is search
+	app.Get("/search", func(c *fiber.Ctx) error {
+		queryParam := c.Query("query")
+		if queryParam == "" {
+			return c.SendStatus(fiber.StatusBadRequest)
+		}
+
+        fmt.Println(queryParam)
+		files, err := os.ReadDir("./all_blogs")
+		if err != nil {
+			log.Println("Error reading blog directory:", err)
+			return err
+		}
+
+		var posts []map[string]interface{}
+
+		for _, file := range files {
+			title := strings.TrimSuffix(file.Name(), ".md")
+			if strings.Contains(strings.ToLower(title), strings.ToLower(queryParam)) {
+				capitalTitle := cases.Title(language.Und, cases.NoLower).String(title)
+				markdown, err := os.ReadFile("./all_blogs/" + file.Name())
+				if err != nil {
+					log.Println("Error reading file:", err)
+					continue
+				}
+
+				md := goldmark.New(
+					goldmark.WithExtensions(extension.GFM),
+				)
+
+				var postContent bytes.Buffer
+				if err := md.Convert(markdown, &postContent); err != nil {
+					log.Println("Error converting markdown:", err)
+					continue
+				}
+				truncatedContent := postContent.String()
+				post := map[string]interface{}{
+					"Title":   capitalTitle,
+					"Content": template.HTML(truncatedContent[:200]),
+					"Slug":    strings.ReplaceAll(title, " ", "-"),
+				}
+				posts = append(posts, post)
+			}
+		}
+
+		return c.Render("post", fiber.Map{
+			"Posts": posts,
+		})
+	})
 
 	// Handler for the homepage to display all posts
 	app.Get("/", func(c *fiber.Ctx) error {
@@ -55,7 +106,7 @@ func main() {
 			truncated_content := postContent.String()
 			post := map[string]interface{}{
 				"Title":   capital_title,
-                "Content": template.HTML(truncated_content[:200]),
+				"Content": template.HTML(truncated_content[:200]),
 				"Slug":    strings.ReplaceAll(title, " ", "-"),
 			}
 			posts = append(posts, post)
