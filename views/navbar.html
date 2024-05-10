@@ -1,6 +1,6 @@
 {{define "navbar"}}
 <nav class="shadow-blue-500/10 shadow-lg bg-white left-0 right-0 fixed top-0 py-2 space-y-4 px-4">
- <form id="searchForm" class="group relative" action="/search" hx-get="/search" hx-trigger="input" hx-target="#searchResults" method="GET">
+ <form id="searchForm" class="group relative" action="/search" hx-get="/search" hx-trigger="input delay:200ms" onsubmit="event.preventDefault();" hx-target="#searchResults" method="GET">
         <svg width="20" height="20" fill="currentColor"
             class="absolute left-3 top-1/2 -mt-2.5 text-slate-400 pointer-events-none group-focus-within:text-blue-500"
             aria-hidden="true">
