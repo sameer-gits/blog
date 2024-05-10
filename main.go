@@ -95,7 +95,7 @@ func main() {
 			}
 		}
 
-		return c.Render("post", fiber.Map{
+		return c.Render("post_homepage", fiber.Map{
 			"Posts": filteredPosts,
 		})
 	})
@@ -121,7 +121,7 @@ func main() {
 				return err
 			}
 
-			return c.Render("post_templ", fiber.Map{
+			return c.Render("post_single", fiber.Map{
 				"Title":   capitalTitle,
 				"Content": template.HTML(postContent.String()),
 			})
