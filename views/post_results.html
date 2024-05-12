@@ -1,0 +1,10 @@
+{{ define "post_results" }}
+{{ range .FilteredPosts }}
+<a href="/posts/{{.Slug}}" class="mb-2 mx-4">
+    <p
+        class="hover:text-{{.PrimaryColor}}-500 duration-200 rounded-md p-4 border font-medium break-words text-pretty text-wrap">
+        {{ .Title }}
+    </p>
+</a>
+{{ end }}
+{{ end }}

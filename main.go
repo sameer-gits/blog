@@ -15,6 +15,30 @@ import (
 	"golang.org/x/text/language"
 )
 
+var primaryColor = "stone"
+
+func searchPosts(directory string) ([]map[string]interface{}, error) {
+	files, err := os.ReadDir(directory)
+	if err != nil {
+		return nil, err
+	}
+
+	var posts []map[string]interface{}
+
+	for _, file := range files {
+		title := strings.TrimSuffix(file.Name(), ".md")
+		capitalTitle := cases.Title(language.Und, cases.NoLower).String(title)
+		post := map[string]interface{}{
+			"Title": capitalTitle,
+			"Slug":  strings.ReplaceAll(title, " ", "-"),
+			"PrimaryColor": primaryColor,
+		}
+		posts = append(posts, post)
+	}
+
+	return posts, nil
+}
+
 func renderPosts(directory string) ([]map[string]interface{}, error) {
 	files, err := os.ReadDir(directory)
 	if err != nil {
@@ -44,8 +68,9 @@ func renderPosts(directory string) ([]map[string]interface{}, error) {
 		truncatedContent := postContent.String()
 		post := map[string]interface{}{
 			"Title":   capitalTitle,
-            "Content": template.HTML(truncatedContent[:200]),
+			"Content": template.HTML(truncatedContent[:200]),
 			"Slug":    strings.ReplaceAll(title, " ", "-"),
+			"PrimaryColor": primaryColor,
 		}
 		posts = append(posts, post)
 	}
@@ -54,13 +79,14 @@ func renderPosts(directory string) ([]map[string]interface{}, error) {
 }
 
 func main() {
+
 	engine := html.New("./views", ".html")
 
 	app := fiber.New(fiber.Config{
 		Views: engine,
 	})
 
-    directory := "./all_blogs/"
+	directory := "./all_blogs/"
 
 	app.Static("/", "./public")
 
@@ -73,14 +99,15 @@ func main() {
 		}
 
 		return c.Render("homepage", fiber.Map{
-			"Posts": posts,
+			"Posts":        posts,
+			"PrimaryColor": primaryColor,
 		})
 	})
 
 	// Handler for search
 	app.Get("/search", func(c *fiber.Ctx) error {
-		queryParam := c.Query("query")
-		posts, err := renderPosts(directory)
+		queryParam := strings.ToLower(c.Query("query"))
+		posts, err := searchPosts(directory)
 		if err != nil {
 			log.Println("Error reading blog directory:", err)
 			return err
@@ -90,13 +117,19 @@ func main() {
 
 		for _, post := range posts {
 			title := post["Title"].(string)
-			if queryParam == "" || strings.Contains(strings.ToLower(title), strings.ToLower(queryParam)) {
+
+			// If the query is empty, include all posts
+			if queryParam == "" {
+
+			} else if strings.Contains(strings.ToLower(title), strings.ToLower(queryParam)) {
+				// If the title contains the query string, include the post
 				filteredPosts = append(filteredPosts, post)
 			}
 		}
 
-		return c.Render("post_homepage", fiber.Map{
-			"Posts": filteredPosts,
+		return c.Render("post_results", fiber.Map{
+			"FilteredPosts": filteredPosts,
+			"PrimaryColor":  primaryColor,
 		})
 	})
 
@@ -122,8 +155,9 @@ func main() {
 			}
 
 			return c.Render("post_single", fiber.Map{
-				"Title":   capitalTitle,
-				"Content": template.HTML(postContent.String()),
+				"Title":        capitalTitle,
+				"Content":      template.HTML(postContent.String()),
+				"PrimaryColor": primaryColor,
 			})
 		}
 
