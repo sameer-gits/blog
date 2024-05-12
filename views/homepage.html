@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Mohd Sameer - My Blog Posts</title>
+    <link rel="icon" type="image/x-icon" href="/gopher.svg">
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     <script src="https://unpkg.com/htmx.org@1.9.12"
         integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
@@ -16,7 +17,7 @@
     <h1 class="text-4xl font-bold md:text-5xl lg:text-6xl mt-16 break-words text-pretty text-center">Welcome to <span class="text-{{.PrimaryColor}}-500">the_blog</span>
     </h1>
     <p class="text-center mx-4 mt-4">All the things I learn related to coding and design I put it here.</p>
-    <div id="searchResults"
+    <div
         class="p-4 my-8 md:my-16 grid grid-cols-1 mx-auto max-w-screen-xl md:grid-cols-2 lg:grid-cols-3 gap-4">
         {{template "post_homepage" . }}
     </div>

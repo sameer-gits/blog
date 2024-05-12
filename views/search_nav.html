@@ -11,7 +11,7 @@
         class="focus:ring-2 focus:ring-{{.PrimaryColor}}-500 focus:outline-none appearance-none w-full text-sm leading-6 text-slate-900 placeholder-slate-400 rounded-md py-2 pl-10 ring-1 ring-slate-200 shadow-{{.PrimaryColor}}-500/10 shadow-sm"
         name="query" type="text" aria-label="Search Posts" placeholder="Search posts title..." autocomplete="off">
     <div class="hidden group-focus-within:block w-full fixed left-0 top-16">
-        <div id="searchResults" class="max-h-96 overflow-y-auto flex-col shadow-{{.PrimaryColor}}-500/30 shadow-2xl bg-white px-4 flex">
+        <div id="searchResults" class="max-h-60 overflow-y-auto flex-col shadow-{{.PrimaryColor}}-500/30 shadow-2xl bg-white px-4 flex">
             {{ template "post_results" . }}
         </div>
     </div>
