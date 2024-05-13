@@ -1,16 +1,14 @@
 package main
 
 import (
-	"bytes"
 	"html/template"
 	"log"
 	"os"
 	"strings"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/template/html/v2"
-	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark/extension"
+	fiberHTML "github.com/gofiber/template/html/v2"
+	"github.com/russross/blackfriday/v2"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
 )
@@ -29,8 +27,8 @@ func searchPosts(directory string) ([]map[string]interface{}, error) {
 		title := strings.TrimSuffix(file.Name(), ".md")
 		capitalTitle := cases.Title(language.Und, cases.NoLower).String(title)
 		post := map[string]interface{}{
-			"Title": capitalTitle,
-			"Slug":  strings.ReplaceAll(title, " ", "-"),
+			"Title":        capitalTitle,
+			"Slug":         strings.ReplaceAll(title, " ", "-"),
 			"PrimaryColor": primaryColor,
 		}
 		posts = append(posts, post)
@@ -56,20 +54,10 @@ func renderPosts(directory string) ([]map[string]interface{}, error) {
 			continue
 		}
 
-		md := goldmark.New(
-			goldmark.WithExtensions(extension.GFM),
-		)
-
-		var postContent bytes.Buffer
-		if err := md.Convert(markdown, &postContent); err != nil {
-			log.Println("Error converting markdown:", err)
-			continue
-		}
-		truncatedContent := postContent.String()
 		post := map[string]interface{}{
-			"Title":   capitalTitle,
-			"Content": template.HTML(truncatedContent[:200]),
-			"Slug":    strings.ReplaceAll(title, " ", "-"),
+			"Title":        capitalTitle,
+			"Content":      template.HTML(markdown[:600]),
+			"Slug":         strings.ReplaceAll(title, " ", "-"),
 			"PrimaryColor": primaryColor,
 		}
 		posts = append(posts, post)
@@ -80,7 +68,7 @@ func renderPosts(directory string) ([]map[string]interface{}, error) {
 
 func main() {
 
-	engine := html.New("./views", ".html")
+	engine := fiberHTML.New("./views", ".html")
 
 	app := fiber.New(fiber.Config{
 		Views: engine,
@@ -144,19 +132,11 @@ func main() {
 				log.Println("Error reading file:", err)
 				return err
 			}
-			md := goldmark.New(
-				goldmark.WithExtensions(extension.GFM),
-			)
 
-			var postContent bytes.Buffer
-			if err := md.Convert(markdown, &postContent); err != nil {
-				log.Println("Error converting markdown:", err)
-				return err
-			}
-
+			output := blackfriday.Run(markdown)
 			return c.Render("post_single", fiber.Map{
 				"Title":        capitalTitle,
-				"Content":      template.HTML(postContent.String()),
+				"Content":      template.HTML(output),
 				"PrimaryColor": primaryColor,
 			})
 		}
