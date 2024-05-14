@@ -1,4 +1,4 @@
-Hello, this is the first blog of my site and this blog is about how to create a blog just like this with go and markdown. This is part 1. Also this is a beginner friendly but i am assuming that you have some prior experience in programming or are fimiliar with some basics concepts or language like css or javascript. Hello, this is the first blog of my site and this blog is about how to create a blog just like this with go and markdown. This is part 1. Also this is a beginner friendly but i am assuming that you have some prior experience in programming or are fimiliar with some basics concepts or language like css or javascript. Hello, this is the first blog of my site and this blog is about how to create a blog just like this with go and markdown. This is part 1. Also this is a beginner friendly but i am assuming that you have some prior experience in programming or are fimiliar with some basics concepts or language like css or javascript.
+Welcome to the first blog post on my site! In this beginner-friendly series, I'll guide you through creating a blog using Go and Markdown. Assuming some prior programming experience in Git, CSS, and basic JavaScript, or any other language, the choice of Go and Markdown is justified by Go's simplicity and Markdown's easy syntax. Throughout this series, I'll guide you in setting up a basic Go web server, parsing Markdown files, templating for consistent styling, integrating CSS (I use Tailwind CSS), and HTMX, and adding features like search. By the end, you'll have a fully functional blog to showcase your writing. So, let's start!
 
 ### Prerequisites:
 
@@ -10,13 +10,21 @@ Hello, this is the first blog of my site and this blog is about how to create a 
 Open your terminal in any folder and type
 
 ```
-mkdir your_blog_name
+mkdir your_project_name
 ```
 then go inside your folder
 ```
-cd your_blog_name
+cd your_project_name
 ```
-open it using your editor, for vim
+next type this in terminal
+```
+go mod init github.com/username/your_project_name
+```
+next
+```
+go get github.com/gofiber/fiber/v2
+```
+this will install go fiber framework, open it using your editor, for vim
 ```
 vim .
 ```
@@ -26,9 +34,29 @@ code .
 ```
 Great! Now let create our first file main.go
 
-Press <kbd>%</kbd> and write main.go in Vim. for VS Code <kbd>Ctrl+N</kbd>
-Now type this
-<pre><code class="language-go">Package main
+Press <kbd>%</kbd> in vim and write main.go in Vim, for VS Code type <kbd>Ctrl+N</kbd>, Now open it and type this
+```
+package main
+
+import (
+    "log"
+    "github.com/gofiber/fiber/v2"
+)
+
 func main() {
+	app := fiber.New()
+	
+	app.Get("/", func (c *fiber.Ctx) error {
+        return c.SendString("Hello, World!")
+	})
+	
+	if err := app.Listen(":3000"); err != nil {
+		log.Fatal("Server error:", err)
+	}
 }
-</code></pre>
+```
+Now if you open your browser and go to `localhost:3000` you will see
+```
+Hello, World!
+```
+Congrats! 🎉️🎉️🎉️ Go Server Done ✅️ Part 2 coming soon!
