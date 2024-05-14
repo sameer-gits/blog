@@ -8,10 +8,13 @@
             d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" />
     </svg>
     <input id="searchInput"
-        class="focus:ring-2 focus:ring-{{.PrimaryColor}}-500 focus:outline-none appearance-none w-full text-sm leading-6 text-slate-900 placeholder-slate-400 rounded-md py-2 pl-10 ring-1 ring-slate-200 shadow-{{.PrimaryColor}}-500/10 shadow-sm"
+        class="focus:ring-2 focus:ring-{{.PrimaryColor}}-500 focus:outline-none appearance-none
+        w-full text-sm leading-6 text-slate-900 placeholder-slate-400 rounded-md py-2 pl-10 ring-1
+        ring-slate-200 shadow-{{.PrimaryColor}}-500/10 shadow-sm"
         name="query" type="text" aria-label="Search Posts" placeholder="Search posts title..." autocomplete="off">
     <div class="hidden group-focus-within:block w-full fixed left-0 top-16">
-        <div id="searchResults" class="max-h-60 overflow-y-auto flex-col shadow-{{.PrimaryColor}}-500/30 shadow-2xl bg-white px-4 flex">
+        <div id="searchResults" class="max-h-60 overflow-y-auto flex-col
+            shadow-{{.PrimaryColor}}-500/30 shadow-2xl bg-white px-4 flex">
             {{ template "post_results" . }}
         </div>
     </div>

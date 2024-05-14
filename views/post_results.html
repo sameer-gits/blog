@@ -2,7 +2,8 @@
 {{ range .FilteredPosts }}
 <a href="/posts/{{.Slug}}" class="w-full mb-2">
     <p
-    class="hover:text-{{.PrimaryColor}}-500 text-balance duration-200 rounded-md p-4 border-2 border-{{.PrimaryColor}}-100 hover:border-{{.PrimaryColor}}-200 font-medium break-words">
+    class="hover:text-{{.PrimaryColor}}-500 text-balance duration-200 rounded-md p-4 border-2
+    border-{{.PrimaryColor}}-100 hover:border-{{.PrimaryColor}}-200 font-medium break-words">
         {{ .Title }}
     </p>
 </a>

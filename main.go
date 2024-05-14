@@ -144,7 +144,13 @@ func main() {
 		return c.SendString("No post specified.")
 	})
 
-	if err := app.Listen(":3000"); err != nil {
+    port := os.Getenv("PORT")
+
+    if port == "" {
+        port = "3000"
+    }
+
+    if err := app.Listen("0.0.0.0:" + port); err != nil {
 		log.Fatal("Server error:", err)
-	}
+    }
 }
