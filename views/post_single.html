@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Mohd Sameer - Blog Post | {{.Title}}</title>
+    <title>Mohd Sameer - Blog Post | {{ .Metadata.Title }}</title>
     <link rel="icon" type="image/x-icon" href="/gopher.svg">
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     <script src="https://unpkg.com/htmx.org@1.9.12"
@@ -32,8 +32,13 @@
         class="w-full p-8 sm:p-20 prose-headings:text-balance prose-p:text-balance prose
         prose-{{.PrimaryColor}} mx-auto my-8 md:my-20 shadow-none lg:shadow-2xl
         lg:shadow-{{.PrimaryColor}}-500/30 rounded-md border-2 border-white
-        lg:border-{{.PrimaryColor}}-200 lg:prose-lg max-w-4xl">
-        <h1 class="text-{{.PrimaryColor}}-500">{{ .Title }}</h1>
+        lg:border-{{.PrimaryColor}}-200 lg:prose-lg prose-hr:my-10 max-w-4xl">
+        <h3 class="font-bold text-{{.PrimaryColor}}-500">Date: {{ .Metadata.Date }}</h3>
+        <h1 class="text-{{.PrimaryColor}}-500">{{ .Metadata.Title }}</h1>
+        <h4 class="font-bold">By: {{ .Metadata.Author }}</h4>
+        <hr>
+        {{ .Metadata.Intro }}
+        <br>
         {{ .Content }}
     </article>
     {{ template "footer" . }}

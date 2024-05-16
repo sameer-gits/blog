@@ -1,156 +1,204 @@
 package main
 
 import (
-	"html/template"
-	"log"
-	"os"
-	"strings"
+    "bytes"
+    "html/template"
+    "log"
+    "net/mail"
+    "os"
+    "path/filepath"
+    "strings"
 
-	"github.com/gofiber/fiber/v2"
-	fiberHTML "github.com/gofiber/template/html/v2"
-	"github.com/russross/blackfriday/v2"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
+    "github.com/gofiber/fiber/v2"
+    fiberHTML "github.com/gofiber/template/html/v2"
+    "github.com/russross/blackfriday/v2"
 )
 
-var primaryColor = "stone"
+const (
+    primaryColor = "stone"
+    directory    = "./all_blogs/"
+)
+
+func readMarkdownFile(filePath string) (map[string]string, string, error) {
+    markdown, err := os.ReadFile(filePath)
+    if err != nil {
+        return nil, "", err
+    }
+
+    msg, err := mail.ReadMessage(bytes.NewReader(markdown))
+    if err != nil {
+        return nil, "", err
+    }
+
+    metadata := map[string]string{
+        "Date":   msg.Header.Get("Date"),
+        "Author": msg.Header.Get("Author"),
+        "Title":  msg.Header.Get("Title"),
+        "Intro":  msg.Header.Get("Intro"),
+    }
+
+    buf := new(bytes.Buffer)
+    _, err = buf.ReadFrom(msg.Body)
+    if err != nil {
+        return nil, "", err
+    }
+
+    return metadata, buf.String(), nil
+}
 
 func searchPosts(directory string) ([]map[string]interface{}, error) {
-	files, err := os.ReadDir(directory)
-	if err != nil {
-		return nil, err
-	}
+    files, err := os.ReadDir(directory)
+    if err != nil {
+        return nil, err
+    }
 
-	var posts []map[string]interface{}
+    var posts []map[string]interface{}
 
-	for _, file := range files {
-		title := strings.TrimSuffix(file.Name(), ".md")
-		capitalTitle := cases.Title(language.Und, cases.NoLower).String(title)
-		post := map[string]interface{}{
-			"Title":        capitalTitle,
-			"Slug":         strings.ReplaceAll(title, " ", "-"),
-			"PrimaryColor": primaryColor,
-		}
-		posts = append(posts, post)
-	}
+    for _, file := range files {
+        if file.IsDir() || !strings.HasSuffix(file.Name(), ".md") {
+            continue
+        }
 
-	return posts, nil
+        title := strings.TrimSuffix(file.Name(), ".md")
+        filePath := filepath.Join(directory, file.Name())
+
+        metadata, _, err := readMarkdownFile(filePath)
+        if err != nil {
+            log.Println("Error reading file:", err)
+            continue
+        }
+
+        post := map[string]interface{}{
+            "Metadata":     metadata,
+            "Slug":         strings.ReplaceAll(title, " ", "-"),
+            "PrimaryColor": primaryColor,
+        }
+        posts = append(posts, post)
+    }
+
+    return posts, nil
 }
 
 func renderPosts(directory string) ([]map[string]interface{}, error) {
-	files, err := os.ReadDir(directory)
-	if err != nil {
-		return nil, err
-	}
+    files, err := os.ReadDir(directory)
+    if err != nil {
+        return nil, err
+    }
 
-	var posts []map[string]interface{}
+    var posts []map[string]interface{}
 
-	for _, file := range files {
-		title := strings.TrimSuffix(file.Name(), ".md")
-		capitalTitle := cases.Title(language.Und, cases.NoLower).String(title)
-		markdown, err := os.ReadFile(directory + file.Name())
-		if err != nil {
-			log.Println("Error reading file:", err)
-			continue
-		}
+    for _, file := range files {
+        if file.IsDir() || !strings.HasSuffix(file.Name(), ".md") {
+            continue
+        }
 
-		post := map[string]interface{}{
-			"Title":        capitalTitle,
-			"Content":      template.HTML(markdown[:600]),
-			"Slug":         strings.ReplaceAll(title, " ", "-"),
-			"PrimaryColor": primaryColor,
-		}
-		posts = append(posts, post)
-	}
+        title := strings.TrimSuffix(file.Name(), ".md")
+        filePath := filepath.Join(directory, file.Name())
 
-	return posts, nil
+        metadata, markdownContent, err := readMarkdownFile(filePath)
+        if err != nil {
+            log.Println("Error reading file:", err)
+            continue
+        }
+
+        body := blackfriday.Run([]byte(markdownContent))
+
+        post := map[string]interface{}{
+            "Content":      template.HTML(body),
+            "Slug":         strings.ReplaceAll(title, " ", "-"),
+            "PrimaryColor": primaryColor,
+            "Metadata":     metadata,
+        }
+        posts = append(posts, post)
+    }
+
+    return posts, nil
 }
 
 func main() {
 
-	engine := fiberHTML.New("./views", ".html")
+    engine := fiberHTML.New("./views", ".html")
 
-	app := fiber.New(fiber.Config{
-		Views: engine,
-	})
+    app := fiber.New(fiber.Config{
+        Views: engine,
+    })
 
-	directory := "./all_blogs/"
+    app.Static("/", "./public")
 
-	app.Static("/", "./public")
+    // Handler for the homepage to display all posts
+    app.Get("/", func(c *fiber.Ctx) error {
+        posts, err := renderPosts(directory)
+        if err != nil {
+            log.Println("Error reading blog directory:", err)
+            return c.Status(fiber.StatusInternalServerError).SendString("Error reading blog directory")
+        }
 
-	// Handler for the homepage to display all posts
-	app.Get("/", func(c *fiber.Ctx) error {
-		posts, err := renderPosts(directory)
-		if err != nil {
-			log.Println("Error reading blog directory:", err)
-			return err
-		}
+        return c.Render("homepage", fiber.Map{
+            "Posts":        posts,
+            "PrimaryColor": primaryColor,
+        })
+    })
 
-		return c.Render("homepage", fiber.Map{
-			"Posts":        posts,
-			"PrimaryColor": primaryColor,
-		})
-	})
+    // Handler for search
+    app.Get("/search", func(c *fiber.Ctx) error {
+        queryParam := strings.ToLower(c.Query("query"))
+        posts, err := searchPosts(directory)
+        if err != nil {
+            log.Println("Error reading blog directory:", err)
+            return c.Status(fiber.StatusInternalServerError).SendString("Error reading blog directory")
+        }
 
-	// Handler for search
-	app.Get("/search", func(c *fiber.Ctx) error {
-		queryParam := strings.ToLower(c.Query("query"))
-		posts, err := searchPosts(directory)
-		if err != nil {
-			log.Println("Error reading blog directory:", err)
-			return err
-		}
+        var filteredPosts []map[string]interface{}
 
-		var filteredPosts []map[string]interface{}
+        for _, post := range posts {
+            metadata := post["Metadata"].(map[string]string)
+            title := metadata["Title"]
 
-		for _, post := range posts {
-			title := post["Title"].(string)
+            if queryParam == "" {
 
-			// If the query is empty, include all posts
-			if queryParam == "" {
+            } else if strings.Contains(strings.ToLower(title), strings.ToLower(queryParam)) {
+                // If the title contains the query string, include the post
+                filteredPosts = append(filteredPosts, post)
+            }
+        }
 
-			} else if strings.Contains(strings.ToLower(title), strings.ToLower(queryParam)) {
-				// If the title contains the query string, include the post
-				filteredPosts = append(filteredPosts, post)
-			}
-		}
+        return c.Render("post_results", fiber.Map{
+            "FilteredPosts": filteredPosts,
+            "PrimaryColor":  primaryColor,
+        })
+    })
 
-		return c.Render("post_results", fiber.Map{
-			"FilteredPosts": filteredPosts,
-			"PrimaryColor":  primaryColor,
-		})
-	})
+    // Handler for individual posts
+    app.Get("/posts/:post_name?", func(c *fiber.Ctx) error {
+        postName := c.Params("post_name")
+        if postName != "" {
+            title := strings.ReplaceAll(postName, "-", " ")
+            filePath := filepath.Join(directory, title+".md")
 
-	// Handler for individual posts
-	app.Get("posts/:post_name?", func(c *fiber.Ctx) error {
-		postName := c.Params("post_name")
-		title := strings.ReplaceAll(postName, "-", " ")
-		capitalTitle := cases.Title(language.Und, cases.NoLower).String(title)
-		if postName != "" {
-			markdown, err := os.ReadFile("./all_blogs/" + title + ".md")
-			if err != nil {
-				log.Println("Error reading file:", err)
-				return err
-			}
+            metadata, markdownContent, err := readMarkdownFile(filePath)
+            if err != nil {
+                log.Println("Error reading file:", err)
+                return c.Status(fiber.StatusInternalServerError).SendString("Error reading file")
+            }
 
-			output := blackfriday.Run(markdown)
-			return c.Render("post_single", fiber.Map{
-				"Title":        capitalTitle,
-				"Content":      template.HTML(output),
-				"PrimaryColor": primaryColor,
-			})
-		}
+            body := blackfriday.Run([]byte(markdownContent))
 
-		return c.SendString("No post specified.")
-	})
+            return c.Render("post_single", fiber.Map{
+                "Content":      template.HTML(body),
+                "Metadata":     metadata,
+                "PrimaryColor": primaryColor,
+            })
+        }
+
+        return c.SendStatus(fiber.StatusBadRequest)
+    })
 
     port := os.Getenv("PORT")
-
     if port == "" {
         port = "3000"
     }
 
     if err := app.Listen("0.0.0.0:" + port); err != nil {
-		log.Fatal("Server error:", err)
+        log.Fatal("Server error:", err)
     }
 }

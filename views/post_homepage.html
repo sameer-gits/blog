@@ -4,11 +4,13 @@
     border-{{.PrimaryColor}}-200 rounded-md odd:lg:shadow-2xl shadow-none odd:lg:shadow-{{.PrimaryColor}}-500/20 h-full"
     href="/posts/{{.Slug}}">
     <div class="space-y-4 mb-4">
-        <h2 class="group-hover:text-{{.PrimaryColor}}-500 duration-200 font-medium text-2xl lg:text-4xl break-words text-balance">{{
-            .Title }}</h2>
-        <p class="group-first:line-clamp-5 line-clamp-3">
-        {{ .Content }}
-        </p>
+        <h2 class="group-hover:text-{{.PrimaryColor}}-500 duration-200 font-medium text-2xl 
+            lg:text-4xl break-words text-balance">{{ .Metadata.Title }}</h2>
+        <h3 class="text-md">Date: {{ .Metadata.Date }} | By: {{.Metadata.Author}}</h3>
+        <hr>
+        <div class="group-first:line-clamp-6 line-clamp-3">
+        {{ .Metadata.Intro }}
+        </div>
     </div>
     <button onclick="window.location.href='/posts/{{.Slug}}'"
         class="active:text-{{.PrimaryColor}}-500 mt-auto hover:bg-slate-100 bg-white hover:text-black
