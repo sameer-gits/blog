@@ -1,5 +1,5 @@
 Title: How to make a Simple Blog using Markdown and Go, Part 1
-Date: Fri, 14 May 2024
+Date: 14 May 2024
 Author: Mohd. Sameer
 Intro: Welcome to the first blog post on my site! In this beginner-friendly series, I'll guide you through creating a blog using Go and Markdown. Assuming some prior programming experience in Git, CSS, and basic JavaScript, or any other language, the choice of Go and Markdown is justified by Go's simplicity and Markdown's easy syntax. Throughout this series, I'll guide you in setting up a basic Go web server, parsing Markdown files, templating for consistent styling, integrating CSS (I use Tailwind CSS), and HTMX, and adding features like search. By the end, you'll have a fully functional blog to showcase your writing. So, let's start!
 

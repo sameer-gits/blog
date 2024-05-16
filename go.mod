@@ -6,7 +6,6 @@ require (
 	github.com/gofiber/fiber/v2 v2.52.4
 	github.com/gofiber/template/html/v2 v2.1.1
 	github.com/russross/blackfriday/v2 v2.1.0
-	golang.org/x/text v0.15.0
 )
 
 require (
