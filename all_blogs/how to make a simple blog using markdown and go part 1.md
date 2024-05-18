@@ -12,27 +12,27 @@ Intro: Welcome to the first blog post on my site! In this beginner-friendly seri
 
 Open your terminal in any folder and type
 
-```
+```nohighlight
 mkdir your_project_name
 ```
 then go inside your folder
-```
+```nohighlight
 cd your_project_name
 ```
 next type this in terminal
-```
+```nohighlight
 go mod init github.com/username/your_project_name
 ```
 next
-```
+```nohighlight
 go get github.com/gofiber/fiber/v2
 ```
 this will install go fiber framework, open it using your editor, for vim
-```
+```nohighlight
 vim .
 ```
 for VS Code
-```
+```nohighlight
 code .
 ```
 Great! Now let create our first file main.go
