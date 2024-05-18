@@ -8,6 +8,8 @@ import (
     "os"
     "path/filepath"
     "strings"
+    "sort"
+    "time"
 
     "github.com/gofiber/fiber/v2"
     fiberHTML "github.com/gofiber/template/html/v2"
@@ -17,6 +19,7 @@ import (
 const (
     primaryColor = "stone"
     directory    = "./all_blogs/"
+    dateLayout   = "02 Jan 2006"
 )
 
 func readMarkdownFile(filePath string) (map[string]string, string, error) {
@@ -111,6 +114,18 @@ func renderPosts(directory string) ([]map[string]interface{}, error) {
         }
         posts = append(posts, post)
     }
+
+    sort.Slice(posts, func(i, j int) bool {
+        dateI, errI := time.Parse(dateLayout, posts[i]["Metadata"].(map[string]string)["Date"])
+        dateJ, errJ := time.Parse(dateLayout, posts[j]["Metadata"].(map[string]string)["Date"])
+
+        if errI != nil || errJ != nil {
+            log.Println("Error parsing dates:", errI, errJ)
+            return false
+        }
+
+        return dateI.After(dateJ)
+    })
 
     return posts, nil
 }
