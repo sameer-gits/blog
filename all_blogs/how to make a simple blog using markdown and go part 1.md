@@ -59,7 +59,7 @@ func main() {
 }
 ```
 Now if you open your browser and go to `localhost:3000` you will see
-```
+```nohighlight
 Hello, World!
 ```
 Congrats! 🎉️🎉️🎉️ Go Server Done ✅️ Part 2 coming soon!
