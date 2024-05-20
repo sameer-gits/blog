@@ -17,7 +17,7 @@ import (
 )
 
 const (
-    primaryColor = "stone"
+    primaryColor = "cyan"
     directory    = "./all_blogs/"
     dateLayout   = "02 Jan 2006"
 )
