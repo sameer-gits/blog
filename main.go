@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"html/template"
 	"log"
 	"net/mail"
@@ -38,18 +39,18 @@ var dbpool *pgxpool.Pool
 
 func init() {
 	if err := godotenv.Load(); err != nil {
-		log.Fatal("Error loading .env file")
+		fmt.Printf("Error loading .env file: %v", err)
 	}
 
 	var err error
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
-		log.Fatal("DATABASE_URL environment variable is not set")
+		fmt.Printf("DATABASE_URL environment variable is not set")
 	}
 
 	dbpool, err = pgxpool.New(context.Background(), databaseURL)
 	if err != nil {
-		log.Fatalf("Unable to connect to database: %v\n", err)
+		fmt.Printf("Unable to connect to database: %v\n", err)
 	}
 }
 
