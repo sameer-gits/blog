@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Mohd Sameer - My Blog Posts</title>
+    <meta name="description" content="Hello, Welcome to the blog, All the things I learn related to coding and design I put it here.">
+    <link rel="icon" type="image/x-icon" href="/gopher.svg">
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script src="https://unpkg.com/htmx.org@1.9.12"
+        integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+        crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <script>
+    tailwind.config = {
+        theme: {
+            fontFamily: {
+                sans: [
+                    '"Playfair Display", sans-serif',
+                ]
+            }
+        }
+    }
+  </script>
+</head>
+
+<body class="accent-zinc flex flex-col min-h-screen">
+    {{ template "navbar" . }}
+    <h1 class="text-4xl text-balance font-bold md:text-5xl lg:text-6xl mt-16 break-words text-center">
+        My <span class="text-zinc-500">design_portfolio</span>
+    </h1>
+    <p class="text-center text-balance mx-4 mt-4">I know Figma, photoshop, illustator</p>
+    <div
+        class="p-4 my-8 md:my-16 grid grid-cols-1 mx-auto max-w-screen-xl md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {{template "work_portfolio" . }}
+    </div>
+    {{ template "footer" . }}
+</body>
+
+</html>

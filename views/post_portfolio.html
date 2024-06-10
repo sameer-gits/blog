@@ -1,0 +1,14 @@
+{{ define "work_portfolio" }}
+{{ range .Works}}
+<a class="p-4 group even:shadow-none max-h-[500px] overflow-hidden flex flex-col sm:p-8 border-2 first:col-span-1 first:md:col-span-2
+    border-zinc-200 rounded-md odd:lg:shadow-2xl shadow-none odd:lg:shadow-zinc-500/20 h-full"
+    href="{{.Link}}">
+    <div class="space-y-4 mb-4">
+        <h2 class="group-hover:text-zinc-500 duration-200 font-medium text-2xl 
+            lg:text-4xl break-words text-balance">{{ .Title }}</h2>
+        <hr>
+        <img src="{{.Image}}" class="h-full object-cover" alt="work image">
+    </div>
+</a>
+{{ end }}
+{{ end }}
