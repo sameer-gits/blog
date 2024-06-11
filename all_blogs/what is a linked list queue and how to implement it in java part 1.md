@@ -65,7 +65,6 @@ public class Queue<T> {
 
 In the code above, we define the `head`, `tail`, and `length` for the `Queue` class. `head` and `tail` will point to the first and last nodes in the queue, respectively, and `length` will store the number of nodes currently in the queue. We also have a constructor that initializes these fields.
 
-
 ### Let's Write More Code
 
 ```diff
@@ -156,3 +155,7 @@ public class Queue<T> {
 }
 ```
 In the next part, we will implement the `dequeue` and `peek` functions to complete this Linked List Queue. Until next time! 👋
+
+#### Update!
+
+You can view Part 2 [here](https://sblog.up.railway.app/posts/what-is-a-linked-list-queue-and-how-to-implement-it-in-java-part-2).
