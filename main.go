@@ -28,11 +28,12 @@ const (
 )
 
 type Work struct {
-	ID          int    `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Image       string `json:"image"`
-	Link        string `json:"link"`
+	ID          int     `json:"id"`
+	Title       *string `json:"title"`
+	Description *string `json:"description"`
+	Image       *string `json:"image"`
+	Video       *string `json:"video"`
+	Link        *string `json:"link"`
 }
 
 var dbpool *pgxpool.Pool
@@ -188,7 +189,7 @@ func main() {
 	})
 
 	app.Get("/portfolio", func(c *fiber.Ctx) error {
-		rows, err := dbpool.Query(context.Background(), "SELECT id, title, description, image, link FROM work")
+		rows, err := dbpool.Query(context.Background(), "SELECT id, title, description, image, link, video FROM work")
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).SendString("Failed to fetch work from database")
 		}
@@ -197,9 +198,9 @@ func main() {
 		var works []Work
 		for rows.Next() {
 			var work Work
-			err := rows.Scan(&work.ID, &work.Title, &work.Description, &work.Image, &work.Link)
+			err := rows.Scan(&work.ID, &work.Title, &work.Description, &work.Image, &work.Link, &work.Video)
 			if err != nil {
-				return c.Status(fiber.StatusInternalServerError).SendString("Failed to scan work data")
+				return c.Status(fiber.StatusInternalServerError).SendString(fmt.Sprintf("Failed to scan work data: %v", err.Error()))
 			}
 			works = append(works, work)
 		}

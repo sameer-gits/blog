@@ -14,6 +14,16 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <style>
+        .masonry {
+            column-count: 2;
+        }
+        @media (max-width: 640px) {
+            .masonry {
+                column-count: 1;
+            }
+        } 
+        </style>
     <script>
     tailwind.config = {
         theme: {
@@ -28,16 +38,34 @@
 </head>
 
 <body class="accent-zinc flex flex-col min-h-screen">
-    {{ template "navbar" . }}
+    {{ template "navbar_portfolio" . }}
     <h1 class="text-4xl text-balance font-bold md:text-5xl lg:text-6xl mt-16 break-words text-center">
         My <span class="text-zinc-500">design_portfolio</span>
     </h1>
-    <p class="text-center text-balance mx-4 mt-4">I know Figma, photoshop, illustator</p>
+    <p class="text-center text-balance mx-4 mt-4">I know Figma, Photoshop, Illustator, Indesign, After Effects</p>
     <div
         class="p-4 my-8 md:my-16 grid grid-cols-1 mx-auto max-w-screen-xl md:grid-cols-2 lg:grid-cols-3 gap-4">
         {{template "work_portfolio" . }}
     </div>
+    <div class="mx-auto masonry max-w-screen-xl space-y-4 p-4">
+    {{template "work_portfolio_video" .}}
+    </div>
     {{ template "footer" . }}
+    <script>
+        function vol(event, id) {
+            const video = document.getElementById("video"+id);
+            const button = document.getElementById("vol"+id).querySelector('span');
+            event.preventDefault();
+        console.log(video.muted)
+        if (video.muted) {
+            video.muted = false;
+            button.textContent = "ON"
+        } else {
+            video.muted = true;
+            button.textContent = "OFF"
+        }
+    };
+    </script>
 </body>
 
 </html>
