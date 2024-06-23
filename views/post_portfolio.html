@@ -29,6 +29,7 @@
             <source src="{{ .Video }}" type="video/mp4">
             Your browser does not support the video tag.
         </video>
+{{ if .Description }}
         <button onclick="vol(event, '{{.ID}}')" id="vol{{ .ID }}"
             class="border shadow-lg shadow-zinc-500/20 active:text-zinc-500
             hover:border-white bg-white hover:text-black rounded-md px-3 py-2 text-sm font-medium flex
@@ -38,6 +39,7 @@
             </svg>
             <span class="ml-auto">OFF</span>
     </button>
+{{ end }}
     </div>
 </a>
 {{ end }}
