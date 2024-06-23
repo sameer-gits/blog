@@ -18,7 +18,7 @@
         .masonry {
             column-count: 2;
         }
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .masonry {
                 column-count: 1;
             }
@@ -42,11 +42,18 @@
     <h1 class="text-4xl text-balance font-bold md:text-5xl lg:text-6xl mt-16 break-words text-center">
         My <span class="text-zinc-500">design_portfolio</span>
     </h1>
-    <p class="text-center text-balance mx-4 mt-4">I know Figma, Photoshop, Illustator, Indesign, After Effects</p>
-    <div
-        class="p-4 my-8 md:my-16 grid grid-cols-1 mx-auto max-w-screen-xl md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <p class="text-center text-balance mx-4 mt-4">I am Excellent Figma, Photoshop, Illustrator, Indesign, After Effects...</p>
+    <h2 class="text-2xl text-balance font-bold md:text-3xl lg:text-4xl mt-16 break-words text-center">
+       Images 
+        </h2>
+        <hr class="my-4">
+    <div class="mx-auto masonry max-w-screen-xl space-y-4 p-4">
         {{template "work_portfolio" . }}
     </div>
+    <h2 class="text-2xl text-balance font-bold md:text-3xl lg:text-4xl mt-16 break-words text-center">
+        Videos
+        </h2>
+        <hr class="my-4">
     <div class="mx-auto masonry max-w-screen-xl space-y-4 p-4">
     {{template "work_portfolio_video" .}}
     </div>
