@@ -44,18 +44,18 @@
     </h1>
     <p class="text-center text-balance mx-4 mt-4">I am Excellent Figma, Photoshop, Illustrator, Indesign, After Effects...</p>
     <h2 class="text-2xl text-balance font-bold md:text-3xl lg:text-4xl mt-16 break-words text-center">
-       Images 
-        </h2>
-        <hr class="my-4">
-    <div class="mx-auto masonry max-w-screen-xl space-y-4 p-4">
-        {{template "work_portfolio" . }}
-    </div>
-    <h2 class="text-2xl text-balance font-bold md:text-3xl lg:text-4xl mt-16 break-words text-center">
         Videos
         </h2>
         <hr class="my-4">
     <div class="mx-auto masonry max-w-screen-xl space-y-4 p-4">
     {{template "work_portfolio_video" .}}
+    </div>
+    <h2 class="text-2xl text-balance font-bold md:text-3xl lg:text-4xl mt-16 break-words text-center">
+       Images 
+        </h2>
+        <hr class="my-4">
+    <div class="mx-auto masonry max-w-screen-xl space-y-4 p-4">
+        {{template "work_portfolio" . }}
     </div>
     {{ template "footer" . }}
     <script>
