@@ -42,7 +42,7 @@
     <h1 class="text-4xl text-balance font-bold md:text-5xl lg:text-6xl mt-16 break-words text-center">
         My <span class="text-zinc-500">design_portfolio</span>
     </h1>
-    <p class="text-center text-balance mx-4 mt-4">I am Excellent Figma, Photoshop, Illustrator, Indesign, After Effects...</p>
+    <p class="text-center text-balance mx-4 mt-4">I am Excellent in Figma, Photoshop, Illustrator, Indesign, After Effects...</p>
     <h2 class="text-2xl text-balance font-bold md:text-3xl lg:text-4xl mt-16 break-words text-center">
         Videos
         </h2>
@@ -59,19 +59,32 @@
     </div>
     {{ template "footer" . }}
     <script>
+        function play(event, id) {
+            const video = document.getElementById("video"+id);
+            const playPauseButton = document.getElementById("play"+id).querySelector('span');
+            event.preventDefault();
+            if (video.paused) {
+                video.play()
+                playPauseButton.textContent = "Pause"
+            } else {
+                video.pause()
+                playPauseButton.textContent = "Play"
+    
+            }
+        };
+
         function vol(event, id) {
             const video = document.getElementById("video"+id);
             const button = document.getElementById("vol"+id).querySelector('span');
             event.preventDefault();
-        console.log(video.muted)
-        if (video.muted) {
-            video.muted = false;
-            button.textContent = "ON"
-        } else {
-            video.muted = true;
-            button.textContent = "OFF"
-        }
-    };
+            if (video.muted) {
+                video.muted = false;
+                button.textContent = "On"
+            } else {
+                video.muted = true;
+                button.textContent = "Off"
+            }
+        };
     </script>
 </body>
 
